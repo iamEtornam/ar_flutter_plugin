@@ -51,7 +51,7 @@ class ARSessionManager {
   Future<Matrix4?> getCameraPose() async {
     try {
       if (Platform.isAndroid) {
-        final serializedCameraPose = await _channel.invokeMethod<Map<String, dynamic>>('getCameraPose', {});
+        final serializedCameraPose = await _channel.invokeMethod<Map<dynamic, dynamic>>('getCameraPose', {});
         final position = serializedCameraPose!['position'];
         final rotation = serializedCameraPose!['rotation'];
 
