@@ -54,7 +54,7 @@ repositories {
 
 dependencies {
     // ✅ ARCore from Google (16 KB safe)
-    implementation 'com.google.ar:core:1.43.0'
+    implementation 'com.google.ar:core:1.52.0'
 
     // SceneView (Filament)
     implementation 'io.github.sceneview:arsceneview:2.2.1'
