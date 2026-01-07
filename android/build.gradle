@@ -6,11 +6,11 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.uhg0.ar_flutter_plugin_2'
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         minSdk 28
-        targetSdk 34
+        targetSdk 36
     }
 
     compileOptions {
@@ -36,5 +36,5 @@ android {
 dependencies {
     implementation 'com.google.ar:core:1.52.0'
     implementation 'io.github.sceneview:arsceneview:2.2.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.22"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.10"
 }
