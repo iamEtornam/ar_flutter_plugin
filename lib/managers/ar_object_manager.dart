@@ -145,4 +145,16 @@ class ARObjectManager {
   removeNode(ARNode node) {
     _channel.invokeMethod<String>('removeNode', {'name': node.name});
   }
+
+  /// Pushes the given node's current transformation to the underlying AR scene.
+  /// Call this after programmatically changing a node's [ARNode.transform],
+  /// [ARNode.position], [ARNode.rotation], [ARNode.scale] or [ARNode.eulerAngles]
+  /// to synchronize the change with the native AR engine.
+  Future<void> updateNode(ARNode node) async {
+    await _channel.invokeMethod<void>('transformationChanged', {
+      'name': node.name,
+      'transformation':
+          MatrixValueNotifierConverter().toJson(node.transformNotifier),
+    });
+  }
 }
