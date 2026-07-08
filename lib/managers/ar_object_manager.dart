@@ -145,4 +145,22 @@ class ARObjectManager {
   removeNode(ARNode node) {
     _channel.invokeMethod<String>('removeNode', {'name': node.name});
   }
+
+  /// Pushes the given node's current transformation to the underlying AR scene.
+  /// Call this after programmatically changing a node's [ARNode.transform],
+  /// [ARNode.position], [ARNode.rotation], [ARNode.scale] or [ARNode.eulerAngles]
+  /// to synchronize the change with the native AR engine.
+  ///
+  /// Fire-and-forget (like [removeNode]): it is intentionally not awaitable
+  /// because the Android side only sends a reply when pan/rotation handling is
+  /// enabled, so awaiting would hang when gestures are disabled. On Android the
+  /// transform is applied only when `handlePans` or `handleRotation` was enabled
+  /// in [ARSessionManager.onInitialize].
+  void updateNode(ARNode node) {
+    _channel.invokeMethod<void>('transformationChanged', {
+      'name': node.name,
+      'transformation':
+          const MatrixValueNotifierConverter().toJson(node.transformNotifier),
+    });
+  }
 }
