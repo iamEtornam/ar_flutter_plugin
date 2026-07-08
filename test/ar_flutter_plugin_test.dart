@@ -62,7 +62,10 @@ void main() {
     final node = ARNode(
         type: NodeType.localGLTF2, uri: 'model.gltf', name: 'myNode');
 
-    await objectManager.updateNode(node);
+    // updateNode is fire-and-forget; flush the event queue so the mock handler
+    // records the dispatched platform call before asserting.
+    objectManager.updateNode(node);
+    await pumpEventQueue();
 
     expect(calls.single.method, 'transformationChanged');
     final args = calls.single.arguments as Map;
