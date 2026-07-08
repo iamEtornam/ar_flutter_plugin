@@ -158,13 +158,13 @@ class ARSessionManager {
             final hitTestResults = serializedHitTestResults.map((e) {
               return ARHitTestResult.fromJson(e);
             }).toList();
-            onPlaneOrPointTap!(hitTestResults);
+            onPlaneOrPointTap?.call(hitTestResults);
           }
           break;
         case 'onPlaneDetected':
           if (onPlaneDetected != null) {
             final planeCountResult = call.arguments as int;
-            onPlaneDetected!(planeCountResult);
+            onPlaneDetected?.call(planeCountResult);
           }
           break;
         case 'dispose':

@@ -160,7 +160,7 @@ class ARObjectManager {
     _channel.invokeMethod<void>('transformationChanged', {
       'name': node.name,
       'transformation':
-          MatrixValueNotifierConverter().toJson(node.transformNotifier),
+          const MatrixValueNotifierConverter().toJson(node.transformNotifier),
     });
   }
 }
