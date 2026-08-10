@@ -146,7 +146,7 @@ class _LocalAndWebObjectsDemoState extends State<LocalAndWebObjectsDemo> {
       scale: Vector3(0.2, 0.2, 0.2),
     );
     if (await arObjectManager!.addNode(node) == true) {
-      setState(() => localNode = node);
+      if (mounted) setState(() => localNode = node);
     } else {
       _snack('Adding local object failed');
     }
@@ -164,7 +164,7 @@ class _LocalAndWebObjectsDemoState extends State<LocalAndWebObjectsDemo> {
       scale: Vector3(0.2, 0.2, 0.2),
     );
     if (await arObjectManager!.addNode(node) == true) {
-      setState(() => webNode = node);
+      if (mounted) setState(() => webNode = node);
     } else {
       _snack('Adding web object failed');
     }
@@ -182,7 +182,7 @@ class _LocalAndWebObjectsDemoState extends State<LocalAndWebObjectsDemo> {
       scale: Vector3(0.2, 0.2, 0.2),
     );
     if (await arObjectManager!.addNode(node) == true) {
-      setState(() => fileSystemNode = node);
+      if (mounted) setState(() => fileSystemNode = node);
     } else {
       _snack('Adding file-system object failed');
     }

@@ -176,7 +176,7 @@ class _CloudAnchorDemoState extends State<CloudAnchorDemo> {
     );
     if (await arObjectManager!.addNode(node, planeAnchor: anchor) == true) {
       nodes.add(node);
-      setState(() => _readyToUpload = true);
+      if (mounted) setState(() => _readyToUpload = true);
     } else {
       _snack('Adding node failed');
     }
@@ -197,7 +197,7 @@ class _CloudAnchorDemoState extends State<CloudAnchorDemo> {
   Future<void> _upload() async {
     if (anchors.isEmpty) return;
     await arAnchorManager!.uploadAnchor(anchors.last);
-    setState(() => _readyToUpload = false);
+    if (mounted) setState(() => _readyToUpload = false);
   }
 
   void _onAnchorUploaded(ARAnchor anchor) {
@@ -249,7 +249,7 @@ class _CloudAnchorDemoState extends State<CloudAnchorDemo> {
       _downloadsInProgress[cloudId] = data;
       arAnchorManager!.downloadAnchor(cloudId);
     });
-    setState(() => _readyToDownload = false);
+    if (mounted) setState(() => _readyToDownload = false);
   }
 
   Future<void> _removeEverything() async {

@@ -117,7 +117,7 @@ class _WebObjectDemoState extends State<WebObjectDemo> {
     );
     final didAdd = await arObjectManager!.addNode(node);
     if (didAdd == true) {
-      setState(() => _node = node);
+      if (mounted) setState(() => _node = node);
     } else {
       _snack('Adding node failed');
     }
