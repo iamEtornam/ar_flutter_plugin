@@ -132,6 +132,11 @@ class ArView(
     private val onObjectMethodCall =
         MethodChannel.MethodCallHandler { call, result ->
             when (call.method) {
+                // No-op ack: the object channel has nothing to set up, but
+                // ARObjectManager.onInitialize() calls it unconditionally and
+                // does not await the result, so a notImplemented() here surfaces
+                // as an unhandled MissingPluginException on the Dart side.
+                "init" -> result.success(null)
                 "addNode" -> {
                     val nodeData = call.arguments as? Map<String, Any>
                     nodeData?.let {

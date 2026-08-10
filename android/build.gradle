@@ -14,12 +14,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '21'
     }
 
     packagingOptions {
@@ -34,7 +34,24 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.ar:core:1.52.0'
+    implementation 'com.google.ar:core:1.54.0'
     implementation 'io.github.sceneview:arsceneview:2.2.1'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.4.10"
 }
+
+// Android 16 KB page-size compatibility, for whoever picks this up next.
+//
+// arsceneview 2.2.1 pins Filament 1.52.0, whose .so files have 4 KB-aligned LOAD
+// segments, so the app fails Android's 16 KB page-size check. Everything else we
+// ship is already fine (ARCore 1.54.0 and libflutter.so are 16 KB+).
+//
+// Do NOT try to fix it by overriding the Filament version alone. Filament's
+// engine hard-validates the version of the precompiled .filamat blobs inside the
+// sceneview AAR, so any newer engine aborts at startup with
+// "Material version mismatch. Expected 53 but received 52" — verified on device
+// with 1.53.1. Alignment only starts at Filament 1.53.0, so no override is both
+// aligned and compatible.
+//
+// The fix is to move sceneview itself: 2.3.0 pins Filament 1.56.0 (aligned), and
+// it compiles against this file's Kotlin unchanged with a clean 16 KB check.
+// Not landed yet only because it has not been run on a device.
