@@ -1,4 +1,7 @@
 # Changelog
+## Unreleased
+* iOS: Cloud Anchors (and the ARCore pod, which bundles its own Firebase 11) are now optional. Set `ENV['AR_FLUTTER_PLUGIN_CLOUD_ANCHORS'] = '0'` at the top of your Podfile to leave them out, e.g. when your app already uses a newer Firebase. Cloud anchor calls then report an error through `onError`. Default behaviour is unchanged.
+
 ## 0.0.3
 * Solved the issue "Failed to RegisterNatives with FlutterJNI" mentioned here : https://github.com/hlefe/ar_flutter_plugin_2/issues/1#issuecomment-2676352087
 

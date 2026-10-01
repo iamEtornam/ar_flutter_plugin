@@ -1,6 +1,8 @@
 import Foundation
 import ARKit
+#if canImport(ARCoreCloudAnchors)
 import ARCoreCloudAnchors
+#endif
 
 func serializeHitResult(_ result: ARHitTestResult) -> Dictionary<String, Any> {
     
@@ -27,6 +29,7 @@ func serializeArray(_ array: simd_float4) -> Array<Float> {
     return [array[0], array[1], array[2], array[3]]
 }
 
+#if canImport(ARCoreCloudAnchors)
 func serializeAnchor(anchor: ARAnchor, anchorNode: SCNNode?, ganchor: GARAnchor, name: String?) -> Dictionary<String, Any?> {
     var serializedAnchor = Dictionary<String, Any?>()
     
@@ -38,6 +41,7 @@ func serializeAnchor(anchor: ARAnchor, anchorNode: SCNNode?, ganchor: GARAnchor,
 
     return serializedAnchor
 }
+#endif
 
 func serializeLocalTransformation(node: SCNNode?) -> Dictionary<String, Any?> {
     var serializedLocalTransformation = Dictionary<String, Any?>()

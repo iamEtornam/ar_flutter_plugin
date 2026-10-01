@@ -1,3 +1,4 @@
+#if canImport(ARCoreCloudAnchors)
 import Foundation
 import ARCoreCloudAnchors
 
@@ -68,3 +69,4 @@ class CloudAnchorHandler: NSObject, GARSessionDelegate {
         pendingAnchors.removeAll()
     }
 }
+#endif

@@ -3,7 +3,9 @@ import UIKit
 import Foundation
 import ARKit
 import Combine
+#if canImport(ARCoreCloudAnchors)
 import ARCoreCloudAnchors
+#endif
 
 class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureRecognizerDelegate, ARSessionDelegate {
     let sceneView: ARSCNView
@@ -20,8 +22,10 @@ class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureReco
     var cancellableCollection = Set<AnyCancellable>() //Used to store all cancellables in (needed for working with Futures)
     var anchorCollection = [String: ARAnchor]() //Used to bookkeep all anchors created by Flutter calls
     
+#if canImport(ARCoreCloudAnchors)
     private var cloudAnchorHandler: CloudAnchorHandler? = nil
     private var arcoreSession: GARSession? = nil
+#endif
     private var arcoreMode: Bool = false
     private var configuration: ARWorldTrackingConfiguration!
     private var tappedPlaneAnchorAlignment = ARPlaneAnchor.Alignment.horizontal // default alignment
@@ -201,6 +205,7 @@ class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureReco
                     deleteAnchor(anchorName: name)
                 }
                 break
+#if canImport(ARCoreCloudAnchors)
             case "initGoogleCloudAnchorMode":
                 arcoreSession = try! GARSession.session()
 
@@ -241,6 +246,13 @@ class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureReco
                     cloudAnchorHandler?.resolveCloudAnchor(anchorId: anchorId, listener: cloudAnchorDownloadedListener(parent: self))
                 }
                 break
+#else
+            case "initGoogleCloudAnchorMode", "uploadAnchor", "downloadAnchor":
+                // Built without ARCore (AR_FLUTTER_PLUGIN_CLOUD_ANCHORS=0 in the Podfile).
+                DispatchQueue.main.async {self.sessionManagerChannel.invokeMethod("onError", arguments: ["Cloud anchors are not included in this build. Remove AR_FLUTTER_PLUGIN_CLOUD_ANCHORS=0 from the Podfile to enable them."])}
+                result(false)
+                break
+#endif
             default:
                 result(FlutterMethodNotImplemented)
                 break
@@ -386,6 +398,7 @@ class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureReco
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
+#if canImport(ARCoreCloudAnchors)
         if (arcoreMode) {
             do {
                 try arcoreSession!.update(frame)
@@ -393,6 +406,7 @@ class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureReco
                 print(error)
             }
         }
+#endif
     }
 
     func addNode(dict_node: Dictionary<String, Any>, dict_anchor: Dictionary<String, Any>? = nil) -> Future<Bool, Never> {
@@ -738,6 +752,7 @@ class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureReco
         }
     }
     
+#if canImport(ARCoreCloudAnchors)
     private class cloudAnchorUploadedListener: CloudAnchorListener {
         private var parent: IosARView
         
@@ -823,6 +838,7 @@ class IosARView: NSObject, FlutterPlatformView, ARSCNViewDelegate, UIGestureReco
             return "Unknown"
         }
     }
+#endif
 }
 
 // ---------------------- ARCoachingOverlayViewDelegate ---------------------------------------
